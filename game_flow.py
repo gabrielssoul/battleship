@@ -1,3 +1,10 @@
+import os
+
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
 def display_board(board):
     print("   ", end="")
     for i in range(len(board)):
@@ -12,6 +19,7 @@ def display_board(board):
 
 def get_shot_coordinates(board_size):
     valid_input = False
+    coordinates = None
     while not valid_input:
         coordinates = input("Enter your coordinates (e.g. B3): ")
         valid_input = are_coordinates_valid(coordinates, board_size)
@@ -57,17 +65,19 @@ def is_cell_occupied(hit_board, coordinates):
     return True
 
 
-def player_shooting(player, oponent_board):
+def player_move(player, enemy_board):
+    coordinates = None
     print(f"Now shooting {player}!")
-    display_board(oponent_board)
+    display_board(enemy_board)
     cell_occupied = True
     while cell_occupied:
-        coordinates = get_shot_coordinates(len(oponent_board))
-        cell_occupied = is_cell_occupied(oponent_board, coordinates)
+        coordinates = get_shot_coordinates(len(enemy_board))
+        cell_occupied = is_cell_occupied(enemy_board, coordinates)
         if cell_occupied:
             print("You already shoot there. Try different place!")
-    oponent_board = update_board_after_shoot(oponent_board, coordinates)
-    return oponent_board
+    enemy_board = update_board_after_shoot(enemy_board, coordinates)
+    winner = is_a_winner(enemy_board)
+    return enemy_board, winner
 
 
 def update_board_after_shoot(hit_board, coordinates):
@@ -77,7 +87,7 @@ def update_board_after_shoot(hit_board, coordinates):
         hit_board[coordinates[0]][coordinates[1]] = "M"
     elif cell_on_hit_board == "S":
         hit_surroundings = check_surroundings_of_hit(hit_board, coordinates)
-        #print(is_ship_sunk(hit_surroundings))
+        # print(is_ship_sunk(hit_surroundings))
         if is_ship_sunk(hit_surroundings):
             print("You sunk a ship!")
             hit_board[coordinates[0]][coordinates[1]] = "X"
@@ -107,8 +117,10 @@ def check_surroundings_of_hit(hit_board, coordinates):
         list_of_cells.append(lower_cell)
         for i in range(len(list_of_cells)):
             try:
-                if hit_board[list_of_cells[i][0]][list_of_cells[i][1]] == "S" or hit_board[list_of_cells[i][0]][list_of_cells[i][1]] == "H":
-                    item_to_add = [list_of_cells[i][0], list_of_cells[i][1], hit_board[list_of_cells[i][0]][list_of_cells[i][1]]]
+                if (hit_board[list_of_cells[i][0]][list_of_cells[i][1]] == "S" or
+                        hit_board[list_of_cells[i][0]][list_of_cells[i][1]] == "H"):
+                    item_to_add = [list_of_cells[i][0], list_of_cells[i][1],
+                                   hit_board[list_of_cells[i][0]][list_of_cells[i][1]]]
                     checked_coordinates.append(item_to_add)
             except IndexError:
                 continue
@@ -123,8 +135,9 @@ def check_surroundings_of_hit(hit_board, coordinates):
         if checked_coordinates[i] == original_cell:
             checked_coordinates.pop(i)
             break
-    #print(checked_coordinates)
+    # print(checked_coordinates)
     return checked_coordinates
+
 
 def is_ship_sunk(hit_surroundings):
     for i in range(len(hit_surroundings)):
@@ -133,7 +146,56 @@ def is_ship_sunk(hit_surroundings):
     return True
 
 
-board = [["~","~","S","H","~","~"],["S","~","~","~","S","S"],["~","~","X","~","~","~"],["~","~","~","~","S","~"],["~","~","~","~","H","~"],["~","~","~","~","H","~"]]
-board = player_shooting("Ania", board)
-display_board(board)
+def is_a_winner(board_to_check):
+    for i in range(len(board_to_check)):
+        for j in range(len(board_to_check)):
+            if board_to_check[i][j] == "S":
+                return False
+    return True
 
+
+def convert_opponents_board_to_display(opponents_board):
+    for i in range(len(opponents_board)):
+        for j in range(len(opponents_board)):
+            if opponents_board[i][j] == "S":
+                opponents_board[i][j] = "~"
+    return opponents_board
+
+
+def display_win(player, board):
+    pass
+
+
+if __name__ == "__main__":
+    board_player_1 = [["~", "~", "S", "H", "~", "~"],
+                      ["S", "~", "~", "~", "S", "S"],
+                      ["~", "~", "X", "~", "~", "~"],
+                      ["~", "~", "~", "~", "S", "~"],
+                      ["~", "M", "~", "~", "H", "~"],
+                      ["~", "~", "~", "~", "H", "~"]]
+
+    board_player_2 = [["S", "H", "~", "~", "~", "~"],
+                      ["~", "~", "S", "~", "~", "~"],
+                      ["~", "~", "~", "~", "S", "~"],
+                      ["~", "X", "~", "~", "H", "~"],
+                      ["~", "~", "M", "~", "~", "~"],
+                      ["~", "S", "H", "S", "~", "~"]]
+
+    player_1 = "Robert"
+    player_2 = "Ania"
+
+    winner = False
+    current_player = player_1
+    opponent_board = board_player_2
+    while not winner:
+        clear_screen()
+        opponent_board, winner = player_move(current_player, opponent_board)
+        if winner:
+            display_win(current_player, opponent_board)
+            break
+        clear_screen()
+        if current_player == player_1:
+            current_player = player_2
+        else:
+            current_player = player_1
+        input(f"Now is {current_player}'s turn. Pres enter to continue...")
