@@ -58,7 +58,7 @@ def place_ships(board, ships, number_of_ships, user):
         print_board(board)
         print("Ships:")
         for i, (ship_name, ship_size) in enumerate(ships.items(), start=1):
-            print(f"{i}. {ship_name} (Size: {ship_size})")
+            print(f"{i}. {ship_name} (Size: {ship_size}) Available ships: ", number_of_ships.count(ship_name))
         ship_choice = input("Choose a ship: ")
         match ship_choice:
             case "1" | "2" | "3":
@@ -78,7 +78,7 @@ def place_ships(board, ships, number_of_ships, user):
                         clear_screen()
                         print("Invalid coordinates. Please try again.")
                 if ship_size == 1:
-                    direction = "h"
+                    direction = "v"
                 else:
                     direction = input("horizontal(h) or vertical(v): ").lower()
                 col = int(ord(coordintaes[0].upper()) - ord("A"))
@@ -86,25 +86,31 @@ def place_ships(board, ships, number_of_ships, user):
                 match direction:
                     case "h":
                         if col + ship_size > len(board[0]):
+                            clear_screen()
                             print("Invalid placement. Please try again.")
                             continue
                         elif (col > 0 and board[row][col - 1] == "S") or \
                                  (col + ship_size < len(board) and board[row][col + ship_size] == "S"):
+                             clear_screen()
                              print("Invalid placement. Please try again.")
                              continue
                         elif (
                             row > 0 and "S" in board[row - 1][col:col + ship_size]):
+                            clear_screen()
                             print("Invalid placement. Please try again.")
                             continue
                         elif row<len(board)-1 and "S" in board[row + 1][col:col + ship_size]:
+                                clear_screen()
                                 print("Invalid placement. Please try again.")
                                 continue
                         elif (row + ship_size < len(
                                  board) and "S" in board[row + ship_size][col:col + ship_size]):
+                             clear_screen()
                              print("Invalid placement. Please try again.")
                              continue
                         for i in range(ship_size):
                             if board[row][col + i]!=".":
+                                clear_screen()
                                 print("Invalid placement. Please try again.")
                                 continue
                         for i in range(ship_size):
@@ -113,15 +119,18 @@ def place_ships(board, ships, number_of_ships, user):
                         clear_screen()
                     case "v":
                         if row + ship_size > len(board):
+                            clear_screen()
                             print("Invalid placement. Please try again.")
                             continue
                         elif (col > 0 and board[row][col - 1] == "S") or (col + ship_size < len(board) and board[row][col + ship_size] == "S"):
-                            print("A")
+                            clear_screen()
+                            print("Invalid coordinates. Please try again.")
                             continue
                         elif (row > 0 and any(board[row - 1][col:col + ship_size]) == "S") or\
                             (row + ship_size < len(board) and any(board[row + ship_size]
                                                                   [col:col + ship_size]) == "S"):
-                            print("B")
+                            clear_screen()
+                            print("Invalid coordinates. Please try again.")
                             continue
                         elif (
                              row > 0 and "S" in board[row - 1][col:col + ship_size] or col<len(board)-1 and "S" in board[row + 1][col:col + ship_size] or
@@ -129,26 +138,32 @@ def place_ships(board, ships, number_of_ships, user):
                              ship_size < len(
                                  board) and "S" in board[row + ship_size][col:col + ship_size]
                          ):
-                             print("C")
+                             clear_screen()
+                             print("Invalid coordinates. Please try again.")
                              continue
                         elif not is_valid_vertical_placement(board, row, col, ship_size):
-                            print("X")
+                            clear_screen()
+                            print("Invalid coordinates. Please try again.")
                             continue
                         elif (
                             row > 0 and "S" in board[row - 1][col:col + ship_size]):
-                            print("D")
+                            clear_screen()
+                            print("Invalid coordinates. Please try again.")
                             continue
                         elif row<len(board)-1:
                               if "S" in board[row + 1][col:col + ship_size]:
-                                print("E")
+                                clear_screen()
+                                print("Invalid coordinates. Please try again.")
                                 continue
                         elif (row + ship_size < len(
                                  board) and "S" in board[row + ship_size][col:col + ship_size]):
-                             print("F")
+                             clear_screen()
+                             print("Invalid coordinates. Please try again.")
                              continue
                         for i in range(ship_size):
                             if board[row + i][col] != ".":
-                                print("G")
+                                clear_screen()
+                                print("Invalid coordinates. Please try again.")
                                 continue
                         for i in range(ship_size):
                             board[row + i][col] = "S"
