@@ -20,7 +20,7 @@ def clear_screen():
 
 
 def print_board(board):
-    col_headers = "   " + " ".join(chr(ord("A") + i)
+    col_headers = "    " + "  ".join(chr(ord("A") + i)
                                    for i in range(len(board[0])))
     print(col_headers)
     for i, row in enumerate(board):
@@ -47,19 +47,19 @@ def checking_coordinates(coordinates, board):
 def is_valid_vertical_placement(board, row, col, ship_size):
     for i in range(max(0, row - 1), min(len(board), row + ship_size + 1)):
         for j in range(max(0, col - 1), min(len(board[0]), col + 2)):
-            if board[i][j] == "S":
+            if board[i][j] == "\U0001F6A2":
                 return False
     return True
 
 
 def place_ships(board, ships, number_of_ships, user):
     while len(number_of_ships) != 0:
-        print(user+"\n")
+        print("\nPlayer: ", user+"\n")
         print_board(board)
-        print("Ships:")
+        print("\nShips: \n")
         for i, (ship_name, ship_size) in enumerate(ships.items(), start=1):
             print(f"{i}. {ship_name} (Size: {ship_size}) Available ships: ", number_of_ships.count(ship_name))
-        ship_choice = input("Choose a ship: ")
+        ship_choice = input("\nChoose a ship: ")
         match ship_choice:
             case "1" | "2" | "3":
                 ship_choice = int(ship_choice)
@@ -69,7 +69,7 @@ def place_ships(board, ships, number_of_ships, user):
                     clear_screen()
                     print("There are no more ships of this type")
                     continue
-                print(f"Placing {ship_name}")
+                print(f"\nPlacing {ship_name}")
                 while True:
                     coordintaes = input("Enter coordintaes: ").upper()
                     if checking_coordinates(coordintaes, board):
@@ -89,22 +89,22 @@ def place_ships(board, ships, number_of_ships, user):
                             clear_screen()
                             print("Invalid placement. Please try again.")
                             continue
-                        elif (col > 0 and board[row][col - 1] == "S") or \
-                                 (col + ship_size < len(board) and board[row][col + ship_size] == "S"):
+                        elif (col > 0 and board[row][col - 1] == "\U0001F6A2") or \
+                                 (col + ship_size < len(board) and board[row][col + ship_size] == "\U0001F6A2"):
                              clear_screen()
                              print("Invalid placement. Please try again.")
                              continue
                         elif (
-                            row > 0 and "S" in board[row - 1][col:col + ship_size]):
+                            row > 0 and "\U0001F6A2" in board[row - 1][col:col + ship_size]):
                             clear_screen()
                             print("Invalid placement. Please try again.")
                             continue
-                        elif row<len(board)-1 and "S" in board[row + 1][col:col + ship_size]:
+                        elif row<len(board)-1 and "\U0001F6A2" in board[row + 1][col:col + ship_size]:
                                 clear_screen()
                                 print("Invalid placement. Please try again.")
                                 continue
                         elif (row + ship_size < len(
-                                 board) and "S" in board[row + ship_size][col:col + ship_size]):
+                                 board) and "\U0001F6A2" in board[row + ship_size][col:col + ship_size]):
                              clear_screen()
                              print("Invalid placement. Please try again.")
                              continue
@@ -114,7 +114,7 @@ def place_ships(board, ships, number_of_ships, user):
                                 print("Invalid placement. Please try again.")
                                 continue
                         for i in range(ship_size):
-                            board[row][col + i] = "S"
+                            board[row][col + i] = "\U0001F6A2"
                         number_of_ships.remove(ship_name)
                         clear_screen()
                     case "v":
@@ -122,21 +122,21 @@ def place_ships(board, ships, number_of_ships, user):
                             clear_screen()
                             print("Invalid placement. Please try again.")
                             continue
-                        elif (col > 0 and board[row][col - 1] == "S") or (col + ship_size < len(board) and board[row][col + ship_size] == "S"):
+                        elif (col > 0 and board[row][col - 1] == "\U0001F6A2") or (col + ship_size < len(board) and board[row][col + ship_size] == "\U0001F6A2"):
                             clear_screen()
                             print("Invalid coordinates. Please try again.")
                             continue
-                        elif (row > 0 and any(board[row - 1][col:col + ship_size]) == "S") or\
+                        elif (row > 0 and any(board[row - 1][col:col + ship_size]) == "\U0001F6A2") or\
                             (row + ship_size < len(board) and any(board[row + ship_size]
-                                                                  [col:col + ship_size]) == "S"):
+                                                                  [col:col + ship_size]) == "\U0001F6A2"):
                             clear_screen()
                             print("Invalid coordinates. Please try again.")
                             continue
                         elif (
-                             row > 0 and "S" in board[row - 1][col:col + ship_size] or row<len(board)-1 and "S" in board[row + 1][col:col + ship_size] or
+                             row > 0 and "\U0001F6A2" in board[row - 1][col:col + ship_size] or row<len(board)-1 and "\U0001F6A2" in board[row + 1][col:col + ship_size] or
                              row +
                              ship_size < len(
-                                 board) and "S" in board[row + ship_size][col:col + ship_size]
+                                 board) and "\U0001F6A2" in board[row + ship_size][col:col + ship_size]
                          ):
                              clear_screen()
                              print("Invalid coordinates. Please try again.")
@@ -146,17 +146,17 @@ def place_ships(board, ships, number_of_ships, user):
                             print("Invalid coordinates. Please try again.")
                             continue
                         elif (
-                            row > 0 and "S" in board[row - 1][col:col + ship_size]):
+                            row > 0 and "\U0001F6A2" in board[row - 1][col:col + ship_size]):
                             clear_screen()
                             print("Invalid coordinates. Please try again.")
                             continue
                         elif row<len(board)-1:
-                              if "S" in board[row + 1][col:col + ship_size]:
+                              if "\U0001F6A2" in board[row + 1][col:col + ship_size]:
                                 clear_screen()
                                 print("Invalid coordinates. Please try again.")
                                 continue
                         elif (row + ship_size < len(
-                                 board) and "S" in board[row + ship_size][col:col + ship_size]):
+                                 board) and "\U0001F6A2" in board[row + ship_size][col:col + ship_size]):
                              clear_screen()
                              print("Invalid coordinates. Please try again.")
                              continue
@@ -166,7 +166,7 @@ def place_ships(board, ships, number_of_ships, user):
                                 print("Invalid coordinates. Please try again.")
                                 continue
                         for i in range(ship_size):
-                            board[row + i][col] = "S"
+                            board[row + i][col] = "\U0001F6A2"
                         number_of_ships.remove(ship_name)
                         clear_screen()
                     case _:
@@ -190,10 +190,10 @@ def menu():
      menu = input("Choose: ")
      match menu:
         case "1":
-            user=input("First player name: ")
+            user=input("\nFirst player name: ")
             user2=input("Second player name: ")
-            board = [["." for i in range(5)] for i in range(5)]
-            board2 = [["." for i in range(5)] for i in range(5)]
+            board = [["\U0001F30A" for i in range(5)] for i in range(5)]
+            board2 = [["\U0001F30A" for i in range(5)] for i in range(5)]
             number_of_ships = ["Cruiser", "Cruiser", "Destroyer", "Destroyer",
                    "Destroyer"]
             clear_screen()
@@ -207,10 +207,10 @@ def menu():
             print_board(board2)
             return user, user2, board, board2
         case "2":
-            user=input("First player name: ")
+            user=input("\nFirst player name: ")
             user2=input("Second player name: ")
-            board = [["." for i in range(10)] for i in range(10)]
-            board2 = [["." for i in range(10)] for i in range(10)]
+            board = [["\U0001F30A" for i in range(10)] for i in range(10)]
+            board2 = [["\U0001F30A" for i in range(10)] for i in range(10)]
             number_of_ships = ["Submarine", "Cruiser", "Cruiser", "Destroyer", "Destroyer",
                    "Destroyer"]
             clear_screen()
@@ -223,10 +223,10 @@ def menu():
             print_board(board2)
             return user, user2, board, board2
         case "3":
-            user=input("First player name: ")
+            user=input("\nFirst player name: ")
             user2=input("Second player name: ")
-            board = [["." for i in range(15)] for i in range(15)]
-            board2 = [["." for i in range(15)] for i in range(15)]
+            board = [["\U0001F30A" for i in range(15)] for i in range(15)]
+            board2 = [["\U0001F30A" for i in range(15)] for i in range(15)]
             number_of_ships = ["Submarine", "Submarine", "Cruiser", "Cruiser", "Cruiser", "Destroyer", "Destroyer", "Destroyer", "Destroyer"]
             clear_screen()
             place_ships(board, ships, number_of_ships, user)
