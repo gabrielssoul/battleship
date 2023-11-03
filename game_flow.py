@@ -1,8 +1,4 @@
-import os
-
-
-def clear_screen():
-    os.system('cls' if os.name == 'nt' else 'clear')
+from placement import clear_screen, menu
 
 
 def display_board(board):
@@ -183,6 +179,8 @@ if __name__ == "__main__":
 
     player_1 = "Robert"
     player_2 = "Ania"
+
+    # player_1, player_2, board_player_1, board_player_2 = menu()
 
     winner = False
     current_player = player_1
