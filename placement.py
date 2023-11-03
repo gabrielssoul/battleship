@@ -133,7 +133,7 @@ def place_ships(board, ships, number_of_ships, user):
                             print("Invalid coordinates. Please try again.")
                             continue
                         elif (
-                             row > 0 and "S" in board[row - 1][col:col + ship_size] or col<len(board)-1 and "S" in board[row + 1][col:col + ship_size] or
+                             row > 0 and "S" in board[row - 1][col:col + ship_size] or row<len(board)-1 and "S" in board[row + 1][col:col + ship_size] or
                              row +
                              ship_size < len(
                                  board) and "S" in board[row + ship_size][col:col + ship_size]
