@@ -184,6 +184,7 @@ def menu():
             clear_screen()
             place_ships(board2, ships, number_of_ships, user2)
             print_board(board2)
+            return user, user2, board, board2
         case "2":
             user=input("First player name: ")
             user2=input("Second player name: ")
@@ -199,6 +200,7 @@ def menu():
                    "Destroyer"]
             place_ships(board2, ships, number_of_ships, user2)
             print_board(board2)
+            return user, user2, board, board2
         case "3":
             user=input("First player name: ")
             user2=input("Second player name: ")
@@ -211,8 +213,10 @@ def menu():
             clear_screen()
             place_ships(board2, ships, number_of_ships, user2)
             print_board(board2)
+            return user, user2, board, board2
         case "x":
             exit()
         case _:
              print("Choose the board size or quit")
+    
 menu()
