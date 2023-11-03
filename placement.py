@@ -1,31 +1,26 @@
+import os
 ships = {
     "Submarine": 3,
     "Cruiser": 2,
     "Destroyer": 1
 }
-number_of_ships = ["Submarine", "Cruiser", "Cruiser", "Destroyer", "Destroyer",
-                   "Destroyer"]
-board = [['.' for i in range(10)] for i in range(10)]
-board2 = [['.' for i in range(10)] for i in range(10)]
-def user_name():
-    user=input("What is your name?: ")
-    user2=input("What is your name?: ")
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")
 
-
-def print_empty_board(cols, rows):
-    board = [['.' for i in range(cols)] for i in range(rows)]
-    col_headers = "   " + " ".join(str(i + 1)
-                                   for i in range(len(board[0])))
-    print(col_headers)
-    for i, row in enumerate(board):
-        row_header = chr(ord('A') + i).ljust(2)
-        row_format = " ".join(row)
-        print(f"{row_header} {row_format}")
-    return board
+# def print_empty_board(cols, rows):
+#     board = [["." for i in range(cols)] for i in range(rows)]
+#     col_headers = "   " + " ".join(chr(ord("A") + i)
+#                                    for i in range(len(board[0])))
+#     print(col_headers)
+#     for i, row in enumerate(board):
+#         row_header = str(i + 1).ljust(2)
+#         row_format = " ".join(row)
+#         print(f"{row_header} {row_format}")
+#     return board
 
 
 def print_board(board):
-    col_headers = "   " + " ".join(chr(ord('A') + i)
+    col_headers = "   " + " ".join(chr(ord("A") + i)
                                    for i in range(len(board[0])))
     print(col_headers)
     for i, row in enumerate(board):
@@ -44,14 +39,23 @@ def checking_coordinates(coordinates, board):
     if not col.isalpha() or not row.isdigit():
         return False
 
-    col = ord(col) - ord('A')
+    col = ord(col) - ord("A")
     row = int(row) - 1
 
     return 0 <= row < len(board) and 0 <= col < len(board[0])
 
+def is_valid_vertical_placement(board, row, col, ship_size):
+    for i in range(max(0, row - 1), min(len(board), row + ship_size + 1)):
+        for j in range(max(0, col - 1), min(len(board[0]), col + 2)):
+            if board[i][j] == "S":
+                return False
+    return True
 
-def place_ships(board, ships):
+
+def place_ships(board, ships, number_of_ships, user):
     while len(number_of_ships) != 0:
+        print(user+"\n")
+        print_board(board)
         print("Ships:")
         for i, (ship_name, ship_size) in enumerate(ships.items(), start=1):
             print(f"{i}. {ship_name} (Size: {ship_size})")
@@ -75,55 +79,76 @@ def place_ships(board, ships):
                     direction = "h"
                 else:
                     direction = input("horizontal(h) or vertical(v): ").lower()
-                row = int(ord(coordintaes[0].upper()) - ord('A'))
-                col = int(coordintaes[1:]) - 1
+                col = int(ord(coordintaes[0].upper()) - ord("A"))
+                row = int(coordintaes[1:]) - 1
                 match direction:
                     case "h":
-                        if (col > 0 and board[row][col - 1] == 'S') or \
-                                (col + ship_size < len(board) and board[row][col + ship_size] == 'S'):
+                        if col + ship_size > len(board[0]):
                             print("Invalid placement. Please try again.")
                             continue
-                        if (
-                            row > 0 and 'S' in board[row - 1][col:col + ship_size] or
-                            row +
-                            ship_size < len(
-                                board) and 'S' in board[row + ship_size][col:col + ship_size]
-                        ):
+                        elif (col > 0 and board[row][col - 1] == "S") or \
+                                 (col + ship_size < len(board) and board[row][col + ship_size] == "S"):
+                             print("Invalid placement. Please try again.")
+                             continue
+                        elif (
+                            row > 0 and "S" in board[row - 1][col:col + ship_size]):
                             print("Invalid placement. Please try again.")
                             continue
+                        elif row<len(board)-1 and "S" in board[row + 1][col:col + ship_size]:
+                                print("Invalid placement. Please try again.")
+                                continue
+                        elif (row + ship_size < len(
+                                 board) and "S" in board[row + ship_size][col:col + ship_size]):
+                             print("Invalid placement. Please try again.")
+                             continue
                         for i in range(ship_size):
-                            if board[row][col + i] != '.':
+                            if board[row][col + i]!=".":
                                 print("Invalid placement. Please try again.")
                                 continue
                         for i in range(ship_size):
-                            board[row][col + i] = 'S'
-                        print_board(board)
+                            board[row][col + i] = "S"
                         number_of_ships.remove(ship_name)
                     case "v":
-                        if (col > 0 and board[row][col - 1] == 'S') or \
-                                (col + ship_size < len(board) and board[row][col + ship_size] == 'S'):
+                        if row + ship_size > len(board):
                             print("Invalid placement. Please try again.")
                             continue
-                        if (row > 0 and any(board[row - 1][col:col + ship_size]) == 'S') or\
+                        elif (col > 0 and board[row][col - 1] == "S") or (col + ship_size < len(board) and board[row][col + ship_size] == "S"):
+                            print("A")
+                            continue
+                        elif (row > 0 and any(board[row - 1][col:col + ship_size]) == "S") or\
                             (row + ship_size < len(board) and any(board[row + ship_size]
-                                                                  [col:col + ship_size]) == 'S'):
-                            print("Invalid placement. Please try again.")
+                                                                  [col:col + ship_size]) == "S"):
+                            print("B")
                             continue
-                        if (
-                            row > 0 and 'S' in board[row - 1][col:col + ship_size] or
-                            row +
-                            ship_size < len(
-                                board) and 'S' in board[row + ship_size][col:col + ship_size]
-                        ):
-                            print("Invalid placement. Please try again.")
+                        elif (
+                             row > 0 and "S" in board[row - 1][col:col + ship_size] or col<len(board)-1 and "S" in board[row + 1][col:col + ship_size] or
+                             row +
+                             ship_size < len(
+                                 board) and "S" in board[row + ship_size][col:col + ship_size]
+                         ):
+                             print("C")
+                             continue
+                        elif not is_valid_vertical_placement(board, row, col, ship_size):
+                            print("X")
                             continue
+                        elif (
+                            row > 0 and "S" in board[row - 1][col:col + ship_size]):
+                            print("D")
+                            continue
+                        elif row<len(board)-1:
+                              if "S" in board[row + 1][col:col + ship_size]:
+                                print("E")
+                                continue
+                        elif (row + ship_size < len(
+                                 board) and "S" in board[row + ship_size][col:col + ship_size]):
+                             print("F")
+                             continue
                         for i in range(ship_size):
-                            if board[row + i][col] != '.':
-                                print("Invalid placement. Please try again.")
+                            if board[row + i][col] != ".":
+                                print("G")
                                 continue
                         for i in range(ship_size):
-                            board[row + i][col] = 'S'
-                        print_board(board)
+                            board[row + i][col] = "S"
                         number_of_ships.remove(ship_name)
                     case _:
                         print("Type (h) or (v) to choose direction")
@@ -132,7 +157,62 @@ def place_ships(board, ships):
                 print("Enter a number (1-3) to choose a ship.")
     return board
 
-
-print_empty_board(10, 10)
-place_ships(board, ships)
-print_board(board)
+def menu():
+     print("\nWELCOME IN BATTLESHIP\n")
+     print("MENU")
+     print("- "*10)
+     print("1 - 5x5 board")
+     print("2 - 10x10 board")
+     print("3 - 15x15 board")
+     print("x - quit")
+     print("- "*10)
+     menu = input("Choose: ")
+     match menu:
+        case "1":
+            user=input("First player name: ")
+            user2=input("Second player name: ")
+            board = [["." for i in range(5)] for i in range(5)]
+            board2 = [["." for i in range(5)] for i in range(5)]
+            number_of_ships = ["Cruiser", "Cruiser", "Destroyer", "Destroyer",
+                   "Destroyer"]
+            clear_screen()
+            place_ships(board, ships, number_of_ships, user)
+            print_board(board)
+            clear_screen()
+            number_of_ships = ["Cruiser", "Cruiser", "Destroyer", "Destroyer",
+                   "Destroyer"]
+            clear_screen()
+            place_ships(board2, ships, number_of_ships, user2)
+            print_board(board2)
+        case "2":
+            user=input("First player name: ")
+            user2=input("Second player name: ")
+            board = [["." for i in range(10)] for i in range(10)]
+            board2 = [["." for i in range(10)] for i in range(10)]
+            number_of_ships = ["Submarine", "Cruiser", "Cruiser", "Destroyer", "Destroyer",
+                   "Destroyer"]
+            clear_screen()
+            place_ships(board, ships, number_of_ships, user)
+            print_board(board)
+            clear_screen()
+            number_of_ships = ["Submarine", "Cruiser", "Cruiser", "Destroyer", "Destroyer",
+                   "Destroyer"]
+            place_ships(board2, ships, number_of_ships, user2)
+            print_board(board2)
+        case "3":
+            user=input("First player name: ")
+            user2=input("Second player name: ")
+            board = [["." for i in range(15)] for i in range(15)]
+            board2 = [["." for i in range(15)] for i in range(15)]
+            number_of_ships = ["Submarine", "Submarine", "Cruiser", "Cruiser", "Cruiser", "Destroyer", "Destroyer", "Destroyer", "Destroyer"]
+            clear_screen()
+            place_ships(board, ships, number_of_ships, user)
+            print_board(board)
+            clear_screen()
+            place_ships(board2, ships, number_of_ships, user2)
+            print_board(board2)
+        case "x":
+            exit()
+        case _:
+             print("Choose the board size or quit")
+menu()
