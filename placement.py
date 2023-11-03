@@ -66,6 +66,7 @@ def place_ships(board, ships, number_of_ships, user):
                 ship_name, ship_size = list(ships.keys())[ship_choice - 1], \
                     list(ships.values())[ship_choice - 1]
                 if ship_name not in number_of_ships:
+                    clear_screen()
                     print("There are no more ships of this type")
                     continue
                 print(f"Placing {ship_name}")
@@ -74,6 +75,7 @@ def place_ships(board, ships, number_of_ships, user):
                     if checking_coordinates(coordintaes, board):
                         break
                     else:
+                        clear_screen()
                         print("Invalid coordinates. Please try again.")
                 if ship_size == 1:
                     direction = "h"
@@ -108,6 +110,7 @@ def place_ships(board, ships, number_of_ships, user):
                         for i in range(ship_size):
                             board[row][col + i] = "S"
                         number_of_ships.remove(ship_name)
+                        clear_screen()
                     case "v":
                         if row + ship_size > len(board):
                             print("Invalid placement. Please try again.")
@@ -150,10 +153,13 @@ def place_ships(board, ships, number_of_ships, user):
                         for i in range(ship_size):
                             board[row + i][col] = "S"
                         number_of_ships.remove(ship_name)
+                        clear_screen()
                     case _:
+                        clear_screen()
                         print("Type (h) or (v) to choose direction")
                         continue
             case _:
+                clear_screen()
                 print("Enter a number (1-3) to choose a ship.")
     return board
 
