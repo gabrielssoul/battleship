@@ -3,15 +3,18 @@ from copy import deepcopy
 
 
 def display_board(board, board2):
-    print("   ", end="")
+    print("    ", end="")
     for i in range(len(board)):
         print(chr(i + 65), end="  ")
-    print("       ", end="")
+    print("      ", end="")
     for i in range(len(board2)):
         print(chr(i + 65), end="  ")
     print()
     for i in range(len(board)):
-        print((i + 1), end="  ")
+        if i >= 9:
+            print((i + 1), end=" ")
+        else:
+            print((i + 1), end="  ")
         for j in range(len(board)):
             print(board[i][j], end=" ")
         print("  ", (i + 1), end="  ")
