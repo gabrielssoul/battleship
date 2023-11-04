@@ -1,9 +1,30 @@
 import os
+from ai_moves import ai_random_placement
+
 ships = {
     "Submarine": 3,
     "Cruiser": 2,
     "Destroyer": 1
 }
+
+game_name = """
+ ____               _______   _______   _        ______    _____   _    _   _____   _____  
+|  _ \      /\     |__   __| |__   __| | |      |  ____|  / ____| | |  | | |_   _| |  __ \ 
+| |_) |    /  \       | |       | |    | |      | |__    | (___   | |__| |   | |   | |__) |
+|  _ <    / /\ \      | |       | |    | |      |  __|    \___ \  |  __  |   | |   |  ___/ 
+| |_) |  / ____ \     | |       | |    | |____  | |____   ____) | | |  | |  _| |_  | |     
+|____/  /_/    \_\    |_|       |_|    |______| |______| |_____/  |_|  |_| |_____| |_|"""
+
+menu_name = """
+┌ ─ ─ ─ ─ ─ ─┐
+├─   MENU   ─┤
+└ ─ ─ ─ ─ ─ ─┘"""
+
+board_name = """
+┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐
+├─   CHOOSE BOARD SIZE   ─┤
+└ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘"""
+
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
 
@@ -179,19 +200,45 @@ def place_ships(board, ships, number_of_ships, user):
     return board
 
 def menu():
-     print("\nWELCOME IN BATTLESHIP\n")
-     print("MENU")
-     print("- "*10)
-     print("1 - 5x5 board")
-     print("2 - 10x10 board")
-     print("3 - 15x15 board")
-     print("x - quit")
-     print("- "*10)
-     menu = input("Choose: ")
-     match menu:
+    clear_screen()
+    menu_choose=True
+    print("\n" + game_name)
+    print(menu_name)
+    print("1 - HUMAN vs HUMAN")
+    print("2 - HUMAN vs AI")
+    print("")
+    print("x - quit")
+    print("- "*10)
+    while menu_choose:
+        menu1 = input("Choose who you want to play with: \n")
+        if menu1=="1":
+            user=input("\nFirst player name: \n")
+            user2=input("Second player name: \n")
+            break
+        elif menu1=="2":
+            user=input("\nHuman player name: \n")
+            user2="AI player"
+            break
+        elif menu1=="x":
+            print("What a shame... :(\nBye bye)")
+            exit()
+        else:
+            print("\nDon't be ridiculous :) \nYou must choose your opponent\n")
+            continue
+    clear_screen()
+
+    print("\n" + game_name)
+    print(board_name)
+    print("- "*10)
+    print("1 - 5x5 board")
+    print("2 - 10x10 board")
+    print("3 - 15x15 board")
+    print("")
+    print("x - quit")
+    print("- "*10)
+    menu2 = input("Choose: ")
+    match menu2:
         case "1":
-            user=input("\nFirst player name: ")
-            user2=input("Second player name: ")
             board = [["\U0001F30A" for i in range(5)] for i in range(5)]
             board2 = [["\U0001F30A" for i in range(5)] for i in range(5)]
             number_of_ships = ["Cruiser", "Cruiser", "Destroyer", "Destroyer",
@@ -203,12 +250,15 @@ def menu():
             number_of_ships = ["Cruiser", "Cruiser", "Destroyer", "Destroyer",
                    "Destroyer"]
             clear_screen()
-            place_ships(board2, ships, number_of_ships, user2)
-            print_board(board2)
+            if user2=="AI player":
+                ai_random_placement(board2, ships, number_of_ships)
+                print("AI player board:")
+                print_board(board2)
+            else:
+                place_ships(board2, ships, number_of_ships, user2)
+                print_board(board2)
             return user, user2, board, board2
         case "2":
-            user=input("\nFirst player name: ")
-            user2=input("Second player name: ")
             board = [["\U0001F30A" for i in range(10)] for i in range(10)]
             board2 = [["\U0001F30A" for i in range(10)] for i in range(10)]
             number_of_ships = ["Submarine", "Cruiser", "Cruiser", "Destroyer", "Destroyer",
@@ -219,12 +269,15 @@ def menu():
             clear_screen()
             number_of_ships = ["Submarine", "Cruiser", "Cruiser", "Destroyer", "Destroyer",
                    "Destroyer"]
-            place_ships(board2, ships, number_of_ships, user2)
-            print_board(board2)
+            if user2=="AI player":
+                ai_random_placement(board2, ships, number_of_ships)
+                print("AI player board:")
+                print_board(board2)
+            else:
+                place_ships(board2, ships, number_of_ships, user2)
+                print_board(board2)
             return user, user2, board, board2
         case "3":
-            user=input("\nFirst player name: ")
-            user2=input("Second player name: ")
             board = [["\U0001F30A" for i in range(15)] for i in range(15)]
             board2 = [["\U0001F30A" for i in range(15)] for i in range(15)]
             number_of_ships = ["Submarine", "Submarine", "Cruiser", "Cruiser", "Cruiser", "Destroyer", "Destroyer", "Destroyer", "Destroyer"]
@@ -232,8 +285,14 @@ def menu():
             place_ships(board, ships, number_of_ships, user)
             print_board(board)
             clear_screen()
-            place_ships(board2, ships, number_of_ships, user2)
-            print_board(board2)
+            number_of_ships = ["Submarine", "Submarine", "Cruiser", "Cruiser", "Cruiser", "Destroyer", "Destroyer", "Destroyer", "Destroyer"]
+            if user2=="AI player":
+                ai_random_placement(board2, ships, number_of_ships)
+                print("AI player board:")
+                print_board(board2)
+            else:
+                place_ships(board2, ships, number_of_ships, user2)
+                print_board(board2)
             return user, user2, board, board2
         case "x":
             exit()
