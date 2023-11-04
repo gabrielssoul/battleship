@@ -1,6 +1,7 @@
+from config import winner_info
 from placement import clear_screen, menu
 from copy import deepcopy
-
+from ai_moves import ai_random_shoot
 
 def display_board(board, board2):
     print("    ", end="")
@@ -87,11 +88,21 @@ def player_move(player, enemy_board, player_board):
     winner = is_a_winner(enemy_board)
     return enemy_board, winner
 
+def ai_move(player_board, player):
+    print(f"Now shooting player: {player}!\n")
+    cell_occupied = True
+    while cell_occupied:
+        coordinates = ai_random_shoot(len(player_board))
+        cell_occupied = is_cell_occupied(player_board, coordinates)
+    player_board= update_board_after_shoot(player_board, coordinates)
+    winner = is_a_winner(player_board)
+    return player_board, winner
+
 
 def update_board_after_shoot(hit_board, coordinates):
     cell_on_hit_board = hit_board[coordinates[0]][coordinates[1]]
     if cell_on_hit_board == "\U0001F30A":
-        hit_board[coordinates[0]][coordinates[1]] = "\U0000274C "
+        hit_board[coordinates[0]][coordinates[1]] = "\U0000274C"
         print("\nYou missed!")
         input("Press enter to hide your board...")
         clear_screen()
@@ -177,8 +188,10 @@ def convert_opponents_board_to_display(opponents_board):
 
 def display_win(player, board):
     clear_screen()
+    print(winner_info, "\n")
+    print("")
     print(f"Congratulations, {player} won!\n")
-    print("   ", end="")
+    print("    ", end="")
     for i in range(len(board)):
         print(chr(i + 65), end="  ")
     print()
@@ -188,11 +201,7 @@ def display_win(player, board):
             print(board[i][j], end=" ")
         print()
 
-
-if __name__ == "__main__":
-    player_1, player_2, board_player_1, board_player_2 = menu()
-    clear_screen()
-    input("Game begins. Press enter to continue...")
+def human_vs_human(player_1, player_2, board_player_1, board_player_2):
     winner = False
     current_player = player_1
     player_board = board_player_1
@@ -212,3 +221,25 @@ if __name__ == "__main__":
             player_board = board_player_1
             opponent_board = board_player_2
         input(f"Now is {current_player}'s turn. Pres enter to continue...")
+
+def human_vs_ai(human, ai_player, human_board, ai_board):
+    winner = False
+    while not winner:
+        clear_screen()
+        ai_board, winner = player_move(human, ai_board, human_board)
+        if winner:
+            display_win(human, ai_board)
+            break
+        human_board, winner = ai_move(human_board, ai_player)
+        if winner:
+            display_win(ai_player, human_board)
+            break
+
+if __name__ == "__main__":
+    player_1, player_2, board_player_1, board_player_2 = menu()
+    clear_screen()
+    input("Game begins. Press enter to continue...")
+    if player_2 == "AI player":
+        human_vs_ai(player_1, player_2, board_player_1, board_player_2)
+    else:
+        human_vs_human(player_1, player_2, board_player_1, board_player_2)

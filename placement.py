@@ -168,7 +168,7 @@ def place_ships(board, ships, number_of_ships, user):
 def menu():
     clear_screen()
     menu_choose=True
-    print("\n" + game_name)
+    print(game_name, "\n")
     print(menu_name)
     print("1 - HUMAN vs HUMAN")
     print("2 - HUMAN vs AI")
@@ -193,7 +193,7 @@ def menu():
             continue
     clear_screen()
 
-    print("\n" + game_name)
+    print(game_name, "\n")
     print(board_name)
     print("- "*10)
     print("1 - 5x5 board")

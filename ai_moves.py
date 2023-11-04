@@ -37,3 +37,9 @@ def ai_random_placement(board, ships, number_of_ships):
         time.sleep(1)
         number_of_ships.remove(ship_name)
     return board
+
+def ai_random_shoot(board_size):
+    row = random.randint(0, board_size - 1)
+    col = random.randint(0, board_size - 1)
+    ai_hit = [row, col]
+    return ai_hit
