@@ -16,7 +16,7 @@ def ai_random_placement(board, ships, number_of_ships):
             surround = [board[r][c] for r in range(max(0, row - 1), min(len(board), row + ship_size + 1))
                               for c in range(max(0, col - 1), min(len(board[0]), col + 2))]
 
-        return all(cell == "." for cell in placement_area) and not any(cell == "\U0001F6A2" for cell in surround)
+        return all(cell == "\U0001F30A" for cell in placement_area) and not any(cell == "\U0001F6A2" for cell in surround)
 
     while len(number_of_ships) != 0:
         print("AI Player is placing ships...\n")
@@ -34,6 +34,6 @@ def ai_random_placement(board, ships, number_of_ships):
                 board[row][col + i] = "\U0001F6A2"
             else:
                 board[row + i][col] = "\U0001F6A2"
-        time.sleep(2)
+        time.sleep(1)
         number_of_ships.remove(ship_name)
     return board

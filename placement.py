@@ -300,4 +300,4 @@ def menu():
         case _:
              print("Choose the board size or quit")
     
-menu()
+# menu()
