@@ -11,6 +11,7 @@ def display_board(board, board2):
         print(chr(i + 65), end="  ")
     print()
     for i in range(len(board)):
+    # ToDo try tu use ternary operator
         if i >= 9:
             print((i + 1), end=" ")
         else:
@@ -37,13 +38,13 @@ def get_shot_coordinates(board_size):
 
 
 def are_coordinates_valid(user_input, board_size):
-    if board_size < 10:
-        if len(user_input) < 2:
-            return False
-    elif len(user_input) > 3:
+    if board_size < 10 and len(user_input) < 2:
+        return False
+    if len(user_input) > 3:
         return False
     if user_input[0].isalpha() and user_input[1].isnumeric():
         user_input_converted = convert_coordinates_to_numbers(user_input)
+        # ToDo combine below 2 lines into 1 if
         if (user_input_converted[0]) in range(board_size):
             if user_input_converted[1] in range(board_size):
                 return True
@@ -67,9 +68,7 @@ def convert_coordinates_to_numbers(coordinates):
 
 
 def is_cell_occupied(hit_board, coordinates):
-    if hit_board[coordinates[0]][coordinates[1]] == "\U0001F30A" or hit_board[coordinates[0]][coordinates[1]] == "\U0001F6A2":
-        return False
-    return True
+    return not (hit_board[coordinates[0]][coordinates[1]] == "\U0001F30A" or hit_board[coordinates[0]][coordinates[1]] == "\U0001F6A2")
 
 
 def player_move(player, enemy_board, player_board):

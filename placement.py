@@ -1,45 +1,11 @@
 import os
 
+from config import ships, game_name, menu_name, board_name
 from ai_moves import ai_random_placement
-
-ships = {
-    "Submarine": 3,
-    "Cruiser": 2,
-    "Destroyer": 1
-}
-
-game_name = """
- ____               _______   _______   _        ______    _____   _    _   _____   _____  
-|  _ \      /\     |__   __| |__   __| | |      |  ____|  / ____| | |  | | |_   _| |  __ \ 
-| |_) |    /  \       | |       | |    | |      | |__    | (___   | |__| |   | |   | |__) |
-|  _ <    / /\ \      | |       | |    | |      |  __|    \___ \  |  __  |   | |   |  ___/ 
-| |_) |  / ____ \     | |       | |    | |____  | |____   ____) | | |  | |  _| |_  | |     
-|____/  /_/    \_\    |_|       |_|    |______| |______| |_____/  |_|  |_| |_____| |_|"""
-
-menu_name = """
-┌ ─ ─ ─ ─ ─ ─┐
-├─   MENU   ─┤
-└ ─ ─ ─ ─ ─ ─┘"""
-
-board_name = """
-┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐
-├─   CHOOSE BOARD SIZE   ─┤
-└ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘"""
 
 
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
-
-# def print_empty_board(cols, rows):
-#     board = [["." for i in range(cols)] for i in range(rows)]
-#     col_headers = "   " + " ".join(chr(ord("A") + i)
-#                                    for i in range(len(board[0])))
-#     print(col_headers)
-#     for i, row in enumerate(board):
-#         row_header = str(i + 1).ljust(2)
-#         row_format = " ".join(row)
-#         print(f"{row_header} {row_format}")
-#     return board
 
 
 def print_board(board):
@@ -76,6 +42,24 @@ def is_valid_vertical_placement(board, row, col, ship_size):
     return True
 
 
+# try to replace below ifs with logical operator
+def is_placement_valid(col, ship_size, board, row):
+    if col + ship_size > len(board[0]):
+        return False
+    if (col > 0 and board[row][col - 1] == "\U0001F6A2") or \
+            (col + ship_size < len(board) and board[row][col + ship_size] == "\U0001F6A2"):
+        return False
+    if (
+            row > 0 and "\U0001F6A2" in board[row - 1][col:col + ship_size]):
+        return False
+    if row < len(board) - 1 and "\U0001F6A2" in board[row + 1][col:col + ship_size]:
+        return False
+    if (row + ship_size < len(
+            board) and "\U0001F6A2" in board[row + ship_size][col:col + ship_size]):
+        return False
+    return True
+
+
 def place_ships(board, ships, number_of_ships, user):
     while len(number_of_ships) != 0:
         print(f"\nNow placing ships player: {user}\n")
@@ -98,40 +82,17 @@ def place_ships(board, ships, number_of_ships, user):
                     coordintaes = input("Enter coordintaes: ").upper()
                     if checking_coordinates(coordintaes, board):
                         break
-                    else:
-                        #clear_screen()
-                        print("Invalid coordinates. Please try again.")
-                if ship_size == 1:
-                    direction = "v"
-                else:
-                    direction = input("horizontal(h) or vertical(v): ").lower()
+                    print("Invalid coordinates. Please try again.")
+                direction = "v" if ship_size == 1 else input("horizontal(h) or vertical(v): ").lower()
+                # try to implement function get_col, get_row to avoid code repetition
                 col = int(ord(coordintaes[0].upper()) - ord("A"))
                 row = int(coordintaes[1:]) - 1
                 match direction:
                     case "h":
-                        if col + ship_size > len(board[0]):
+                        if not is_placement_valid(col, ship_size, board, row):
                             clear_screen()
                             print("Invalid placement. Please try again.")
                             continue
-                        elif (col > 0 and board[row][col - 1] == "\U0001F6A2") or \
-                                 (col + ship_size < len(board) and board[row][col + ship_size] == "\U0001F6A2"):
-                             clear_screen()
-                             print("Invalid placement. Please try again.")
-                             continue
-                        elif (
-                            row > 0 and "\U0001F6A2" in board[row - 1][col:col + ship_size]):
-                            clear_screen()
-                            print("Invalid placement. Please try again.")
-                            continue
-                        elif row<len(board)-1 and "\U0001F6A2" in board[row + 1][col:col + ship_size]:
-                                clear_screen()
-                                print("Invalid placement. Please try again.")
-                                continue
-                        elif (row + ship_size < len(
-                                 board) and "\U0001F6A2" in board[row + ship_size][col:col + ship_size]):
-                             clear_screen()
-                             print("Invalid placement. Please try again.")
-                             continue
                         for i in range(ship_size):
                             if board[row][col + i]!=".":
                                 clear_screen()
@@ -142,6 +103,7 @@ def place_ships(board, ships, number_of_ships, user):
                         number_of_ships.remove(ship_name)
                         clear_screen()
                     case "v":
+                        # ToDo use is_placement_valid
                         if row + ship_size > len(board):
                             clear_screen()
                             print("Invalid placement. Please try again.")
