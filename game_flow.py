@@ -89,22 +89,25 @@ def player_move(player, enemy_board, player_board):
 def update_board_after_shoot(hit_board, coordinates):
     cell_on_hit_board = hit_board[coordinates[0]][coordinates[1]]
     if cell_on_hit_board == "\U0001F30A":
+        hit_board[coordinates[0]][coordinates[1]] = "\U0000274C "
+        print("\nYou missed!")
+        input("Press enter to hide your board...")
         clear_screen()
-        print("You missed!")
-        hit_board[coordinates[0]][coordinates[1]] = "\U0000274C"
     elif cell_on_hit_board == "\U0001F6A2":
         hit_surroundings = check_surroundings_of_hit(hit_board, coordinates)
         # print(is_ship_sunk(hit_surroundings))
         if is_ship_sunk(hit_surroundings):
-            clear_screen()
-            print("You sunk a ship!")
             hit_board[coordinates[0]][coordinates[1]] = "\U0001F480"
+            print("\nYou sunk a ship!")
+            input("Press enter to hide your board...")
+            clear_screen()
             for i in range(len(hit_surroundings)):
                 hit_board[hit_surroundings[i][0]][hit_surroundings[i][1]] = "\U0001F480"
         else:
-            clear_screen()
-            print("You hit a ship!")
             hit_board[coordinates[0]][coordinates[1]] = "\U0001F4A5"
+            print("\nYou hit a ship!")
+            input("Press enter to hide your board...")
+            clear_screen()
     return hit_board
 
 
@@ -144,7 +147,6 @@ def check_surroundings_of_hit(hit_board, coordinates):
         if checked_coordinates[i] == original_cell:
             checked_coordinates.pop(i)
             break
-    # print(checked_coordinates)
     return checked_coordinates
 
 
@@ -172,26 +174,23 @@ def convert_opponents_board_to_display(opponents_board):
 
 
 def display_win(player, board):
-    pass
+    clear_screen()
+    print(f"Congratulations, {player} won!\n")
+    print("   ", end="")
+    for i in range(len(board)):
+        print(chr(i + 65), end="  ")
+    print()
+    for i in range(len(board)):
+        print((i + 1), end="  ")
+        for j in range(len(board)):
+            print(board[i][j], end=" ")
+        print()
 
 
 if __name__ == "__main__":
-    # board_player_1 = [["\U0001F30A", "\U0001F30A", "\U0001F6A2", "\U0001F4A5"],
-    #                   ["\U0001F6A2", "\U0001F30A", "\U0001F30A", "\U0001F30A"],
-    #                   ["\U0001F30A", "\U0001F30A", "\U00002620", "\U0001F30A"],
-    #                   ["\U0001F30A", "\U0001F30A", "\U0001F30A", "\U0001F30A"]]
-                      
-    # board_player_2 = [["\U0001F6A2", "\U0001F4A5", "\U0001F30A", "\U0001F30A"],
-    #                   ["\U0001F30A", "\U0001F30A", "\U0001F6A2", "\U0001F30A"],
-    #                   ["\U0001F30A", "\U00002620", "\U0001F30A", "\U0001F30A"],
-    #                   ["\U0001F30A", "\U0001F30A", "\U00002716", "\U0001F30A"]]
-        
-
-    # player_1 = "Robert"
-    # player_2 = "Ania"
-
     player_1, player_2, board_player_1, board_player_2 = menu()
-
+    clear_screen()
+    input("Game begins. Press enter to continue...")
     winner = False
     current_player = player_1
     player_board = board_player_1
@@ -202,7 +201,6 @@ if __name__ == "__main__":
         if winner:
             display_win(current_player, opponent_board)
             break
-        #clear_screen()
         if current_player == player_1:
             current_player = player_2
             player_board = board_player_2

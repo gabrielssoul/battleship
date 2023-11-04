@@ -26,6 +26,7 @@ board_name = """
 ├─   CHOOSE BOARD SIZE   ─┤
 └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘"""
 
+
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
 
@@ -66,6 +67,7 @@ def checking_coordinates(coordinates, board):
 
     return 0 <= row < len(board) and 0 <= col < len(board[0])
 
+
 def is_valid_vertical_placement(board, row, col, ship_size):
     for i in range(max(0, row - 1), min(len(board), row + ship_size + 1)):
         for j in range(max(0, col - 1), min(len(board[0]), col + 2)):
@@ -76,9 +78,9 @@ def is_valid_vertical_placement(board, row, col, ship_size):
 
 def place_ships(board, ships, number_of_ships, user):
     while len(number_of_ships) != 0:
-        print("\nPlayer: ", user+"\n")
+        print(f"\nNow placing ships player: {user}\n")
         print_board(board)
-        print("\nShips: \n")
+        print("\nAvailable ships: \n")
         for i, (ship_name, ship_size) in enumerate(ships.items(), start=1):
             print(f"{i}. {ship_name} (Size: {ship_size}) Available ships: ", number_of_ships.count(ship_name))
         ship_choice = input("\nChoose a ship: ")
@@ -97,7 +99,7 @@ def place_ships(board, ships, number_of_ships, user):
                     if checking_coordinates(coordintaes, board):
                         break
                     else:
-                        clear_screen()
+                        #clear_screen()
                         print("Invalid coordinates. Please try again.")
                 if ship_size == 1:
                     direction = "v"
@@ -200,6 +202,7 @@ def place_ships(board, ships, number_of_ships, user):
                 print("Enter a number (1-3) to choose a ship.")
     return board
 
+
 def menu():
     clear_screen()
     menu_choose=True
@@ -212,15 +215,15 @@ def menu():
     print("- "*10)
     while menu_choose:
         menu1 = input("Choose who you want to play with: \n")
-        if menu1=="1":
-            user=input("\nFirst player name: \n")
-            user2=input("Second player name: \n")
+        if menu1 == "1":
+            user = input("\nFirst player name: \n")
+            user2 = input("Second player name: \n")
             break
-        elif menu1=="2":
-            user=input("\nHuman player name: \n")
-            user2="AI player"
+        elif menu1 == "2":
+            user = input("\nHuman player name: \n")
+            user2 = "AI player"
             break
-        elif menu1=="x":
+        elif menu1 == "x":
             print("What a shame... :(\nBye bye)")
             exit()
         else:
@@ -251,7 +254,7 @@ def menu():
             number_of_ships = ["Cruiser", "Cruiser", "Destroyer", "Destroyer",
                    "Destroyer"]
             clear_screen()
-            if user2=="AI player":
+            if user2 == "AI player":
                 ai_random_placement(board2, ships, number_of_ships)
                 print("AI player board:")
                 print_board(board2)
@@ -270,7 +273,7 @@ def menu():
             clear_screen()
             number_of_ships = ["Submarine", "Cruiser", "Cruiser", "Destroyer", "Destroyer",
                    "Destroyer"]
-            if user2=="AI player":
+            if user2 == "AI player":
                 ai_random_placement(board2, ships, number_of_ships)
                 print("AI player board:")
                 print_board(board2)
@@ -287,7 +290,7 @@ def menu():
             print_board(board)
             clear_screen()
             number_of_ships = ["Submarine", "Submarine", "Cruiser", "Cruiser", "Cruiser", "Destroyer", "Destroyer", "Destroyer", "Destroyer"]
-            if user2=="AI player":
+            if user2 == "AI player":
                 ai_random_placement(board2, ships, number_of_ships)
                 print("AI player board:")
                 print_board(board2)
