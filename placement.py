@@ -1,4 +1,5 @@
 import os
+
 from ai_moves import ai_random_placement
 
 ships = {
@@ -299,4 +300,4 @@ def menu():
         case _:
              print("Choose the board size or quit")
     
-#menu()
+menu()
