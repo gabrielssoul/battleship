@@ -29,7 +29,7 @@ def display_board(board, board2):
             for h in range(len(board2)):
                 print(board2[i][h], end=" ")
         if i == len(board):
-            print(f"\nYour board                Enemy board")
+            print(f"\nYour board(first), Enemy board(second)")
         print()
 
 
