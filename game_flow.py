@@ -3,6 +3,7 @@ from placement import clear_screen, menu
 from copy import deepcopy
 from ai_moves import ai_random_shoot
 
+
 def display_board(board, board2):
     print("    ", end="")
     for i in range(len(board)):
@@ -11,19 +12,26 @@ def display_board(board, board2):
     for i in range(len(board2)):
         print(chr(i + 65), end="  ")
     print()
-    for i in range(len(board)):
-    # ToDo try tu use ternary operator
-        if i >= 9:
-            print((i + 1), end=" ")
-        else:
-            print((i + 1), end="  ")
-        for j in range(len(board)):
-            print(board[i][j], end=" ")
-        print("  ", (i + 1), end="  ")
-        for h in range(len(board2)):
-            print(board2[i][h], end=" ")
+    for i in range(len(board)+1):
+        if i <= (len(board)-1):
+            # ToDo try tu use ternary operator
+            if i >= 9:
+                print((i + 1), end=" ")
+            else:
+                print((i + 1), end="  ")
+            for j in range(len(board)):
+                print(board[i][j], end=" ")
+            print("   ", end="")
+            if i >= 9:
+                print((i + 1), end=" ")
+            else:
+                print((i + 1), end="  ")
+            for h in range(len(board2)):
+                print(board2[i][h], end=" ")
+        if i == len(board):
+            print(f"\nYour board                Enemy board")
         print()
-    print("\nYour board           Enemy board")
+
 
 
 def get_shot_coordinates(board_size):
@@ -88,13 +96,14 @@ def player_move(player, enemy_board, player_board):
     winner = is_a_winner(enemy_board)
     return enemy_board, winner
 
+
 def ai_move(player_board, player):
     print(f"Now shooting player: {player}!\n")
     cell_occupied = True
     while cell_occupied:
         coordinates = ai_random_shoot(len(player_board))
         cell_occupied = is_cell_occupied(player_board, coordinates)
-    player_board= update_board_after_shoot(player_board, coordinates)
+    player_board = update_board_after_shoot(player_board, coordinates)
     winner = is_a_winner(player_board)
     return player_board, winner
 
